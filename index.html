@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="pt-br">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Calculadora de Emissão de CO²</title>
+		<link rel="stylesheet" href="css/style.css" />
+		<style>
+			body{font-family:Arial,Helvetica,sans-serif;max-width:850px;margin:24px auto;padding:0 16px;color:inherit}
+			header{margin-bottom:18px}
+			h1{margin:0 0 6px;font-size:1.6rem}
+			p.lead{margin:0 0 18px}
+			.form-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+			label{display:block;font-weight:600;margin-bottom:6px}
+			input[type=text], input[type=number], select{padding:8px;border:1px solid #ccc;border-radius:4px;width:100%;box-sizing:border-box}
+			.col{flex:1 1 200px;min-width:200px}
+			.actions{margin-top:12px}
+		</style>
+	</head>
+	<body>
+		<header>
+			<h1 id="pageTitle">Calculadora de Emissão de CO<span style="vertical-align:super">2</span></h1>
+			<p class="lead">Calcule as emissões de CO<span style="vertical-align:super">2</span> das suas viagens e contribua para um planeta mais sustentável.</p>
+		</header>
+
+		<main>
+			<form id="calcForm" onsubmit="return false;" role="form" aria-labelledby="pageTitle">
+				<div class="form-row">
+					<div class="col">
+						<label for="origin">Cidade de Origem</label>
+						<select id="origin" name="origin">
+							<option value="">Selecione a cidade...</option>
+						</select>
+					</div>
+					<div class="col">
+						<label for="destination">Cidade de Destino</label>
+						<select id="destination" name="destination">
+							<option value="">Selecione a cidade...</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="form-row" style="align-items:center">
+					<div style="flex:1 1 360px">
+						<label for="distance">Distância (km)</label>
+						<input type="number" id="distance" name="distance" placeholder="Será calculada automaticamente" readonly />
+					</div>
+					<div style="display:flex;align-items:center;gap:8px">
+						<input type="checkbox" id="manualDistance" />
+						<label for="manualDistance" style="margin:0">Inserir distância manualmente</label>
+					</div>
+				</div>
+
+				<!-- Datalist populado via RoutesDB / CONFIG -->
+				<datalist id="cities-list"></datalist>
+
+				<div class="form-row">
+					<div class="col">
+						<label for="transport">Escolher o meio de transporte</label>
+						<select id="transport" name="transport">
+							<option value="car">Carro</option>
+							<option value="bus">Ônibus</option>
+							<option value="truck">Caminhão</option>
+							<option value="bicycle">Bicicleta</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="actions">
+					<button id="calculateBtn" type="button">Calcular Emissão</button>
+				</div>
+			</form>
+
+			<div id="result" class="result" aria-live="polite" style="display:none"></div>
+		</main>
+
+		<footer>
+			<p>Desenvolvido para o desafio DIO</p>
+		</footer>
+
+		<!-- Scripts: routes, config, calculator, app -->
+		<script src="js/routes-data.js"></script>
+		<script src="js/config.js"></script>
+		<script src="js/calculator.js"></script>
+		<script src="js/ui.js"></script>
+		<script src="js/app.js"></script>
+
+		<script>
+		  // Inicializações após carregar scripts
+		document.addEventListener('DOMContentLoaded', function(){
+		if(typeof CONFIG !== 'undefined'){ CONFIG.populateCitiesDatalist(); CONFIG.setupDistanceAutofill(); }
+		if(typeof UI !== 'undefined'){
+			UI.populateTransportSelect('transport');
+			UI.populateCitySelect('origin');
+			UI.populateCitySelect('destination');
+			// tornar selects pesquisáveis
+			UI.makeSelectSearchable('origin');
+			UI.makeSelectSearchable('destination');
+		}
+	});
+		</script>
+	</body>
+</html>
